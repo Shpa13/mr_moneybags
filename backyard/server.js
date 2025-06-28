@@ -10,14 +10,27 @@ const PORT = process.env.PORT || 5001;
 
 async function initDB() {
   try {
-    await sql;
-  } catch (error) {}
+    await sql`CREATE TABLE IF NOT EXISTS transactions(
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    category VARCHAR(255) NOT NULL,
+    created_at DATE NOT NULL DEFAULT CURRENT_DATE
+    )`;
+    console.log("database initialization: success");
+  } catch (error) {
+    console.log("error initializing neon database", error);
+    process.exit(1); //1=failure, 0=success
+  }
 }
 
 app.get("/", (req, res) => {
   res.send("app test; success");
 });
 
-app.listen(PORT, () => {
-  console.log("server is running on port:", PORT);
+initDB().then(() => {
+  app.listen(PORT, () => {
+    console.log("server is running on port:", PORT);
+  });
 });
