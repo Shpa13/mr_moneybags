@@ -29,7 +29,7 @@ async function initDB() {
 app.get("/", (req, res) => {
   res.send("sucess!");
 });
-
+// fetch transactions by user_id
 app.get("/api/transactions/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
@@ -43,7 +43,7 @@ app.get("/api/transactions/:userId", async (req, res) => {
     res.status(500).json({ message: "internal server error" });
   }
 });
-
+// create a transaction api
 app.post("/api/transactions", async (req, res) => {
   // title, amount, category, user_id
   try {
@@ -62,7 +62,7 @@ app.post("/api/transactions", async (req, res) => {
     res.status(500).json({ message: "internal server error" });
   }
 });
-
+// delete a transaction
 app.delete("/api/transactions/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -82,6 +82,32 @@ app.delete("/api/transactions/:id", async (req, res) => {
     }
 
     res.status(200).json({ message: "Transaction deleted" });
+  } catch (error) {
+    console.log("error deleteing transaction", error);
+    res.status(500).json({ message: "internal server error" });
+  }
+});
+// get transactions summary
+app.get("/api/transactions/summary/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const [{ balance }] = await sql`
+    SELECT COALESCE(SUM(amount), 0) AS balance FROM transactions WHERE user_id = ${userId}
+    `;
+
+    const [{ income }] = await sql`
+    SELECT COALESCE(SUM(amount), 0 ) AS income FROM transactions WHERE user_id = ${userId} AND amount > 0
+     `;
+
+    const [{ expenses }] = await sql`
+    SELECT COALESCE(SUM(amount), 0 ) AS expenses FROM transactions WHERE user_id = ${userId} AND amount < 0
+     `;
+
+    res.status(200).json({
+      balance,
+      income,
+      expenses,
+    });
   } catch (error) {
     console.log("error creating transaction", error);
     res.status(500).json({ message: "internal server error" });
