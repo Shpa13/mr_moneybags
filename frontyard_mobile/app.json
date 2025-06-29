@@ -8,6 +8,9 @@
     "scheme": "frontyardmobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "assetBundlePatterns":[
+      "assets/images/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.frontyard-mobile"
