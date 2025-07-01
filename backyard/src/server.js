@@ -10,6 +10,7 @@ dotenv.config();
 
 const app = express();
 
+// checks for deplyment, pings server to keep alive
 if (process.env.NODE_ENV === "production") job.start();
 
 app.use(rateLimiter);
