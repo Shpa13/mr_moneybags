@@ -36,6 +36,11 @@ export default function SignUpScreen() {
       // and capture OTP code
       setPendingVerification(true);
     } catch (err) {
+      if (err.errors?.[0]?.code === "form_identifier_exists") {
+        setError("Email is already registered");
+      } else {
+        setError("An Error occurred. Please try again");
+      }
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
@@ -106,9 +111,10 @@ export default function SignUpScreen() {
       enableOnAndroid={true}
       enableAutomaticScroll={true}
     >
+      {/* <Text style={styles.title}>Salmon Strength</Text> */}
       <View style={styles.container}>
         <Image
-          source={require("../../assets/images/revenue-i2.png")}
+          source={require("../../assets/images/salmon.png")}
           style={styles.illustration}
         />
         <Text style={styles.title}>Create Account</Text>
@@ -141,7 +147,7 @@ export default function SignUpScreen() {
           onChangeText={(password) => setPassword(password)}
         />
         <TouchableOpacity style={styles.button} onPress={onSignUpPress}>
-          <Text>Sign Up</Text>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
         <View style={styles.footerContainer}>
