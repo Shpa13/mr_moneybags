@@ -28,6 +28,7 @@ const CreateScreen = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedDueDate, setSelectedDueDate] = useState(new Date());
   const [isExpense, setIsExpense] = useState(true);
+  //   const [isPayment, setIsPayment] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCreate = async () => {
@@ -78,7 +79,7 @@ const CreateScreen = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {/* header element */}
       <View style={styles.header}>
         <TouchableOpacity
@@ -104,136 +105,166 @@ const CreateScreen = () => {
           )}
         </TouchableOpacity>
       </View>
-      <View style={styles.card}>
-        {/* transaction date picker */}
-        <View>
-          <Text>transaction date</Text>
-          <DateTimePicker
-            mode="single"
-            date={selectedDate}
-            onChange={({ date }) => setSelectedDate(date)}
-            styles={defaultStyles}
-          />
-        </View>
-        <View>
-          <Text>Due Date</Text>
-          <DateTimePicker
-            mode="single"
-            date={selectedDueDate}
-            onChange={({ date }) => setSelectedDueDate(date)}
-            styles={defaultStyles}
-          />
-        </View>
-        {/* expenses selector */}
-        <View style={styles.typeSelector}>
-          <TouchableOpacity
-            style={[styles.typeButton, isExpense && styles.typeButtonActive]}
-            onPress={() => setIsExpense(true)}
-          >
-            <Ionicons
-              name="arrow-down-circle"
-              size={22}
-              color={isExpense ? COLORS.white : COLORS.expense}
-              style={styles.typeIcon}
+      <ScrollView>
+        <View style={styles.card}>
+          {/* transaction date picker */}
+          <View>
+            <Text style={styles.sectionTitle}>Transaction Date</Text>
+            <DateTimePicker
+              mode="single"
+              date={selectedDate}
+              onChange={({ date }) => setSelectedDate(date)}
+              styles={defaultStyles}
             />
-            <Text
-              style={[
-                styles.typeButtonText,
-                isExpense && styles.typeButtonTextActive,
-              ]}
-            >
-              Expense
-            </Text>
-          </TouchableOpacity>
-          {/* Income selector */}
-          <TouchableOpacity
-            style={[styles.typeButton, !isExpense && styles.typeButtonActive]}
-            onPress={() => setIsExpense(false)}
-          >
-            <Ionicons
-              name="arrow-up-circle"
-              size={22}
-              color={!isExpense ? COLORS.white : COLORS.income}
-              style={styles.typeIcon}
-            />
-            <Text
-              style={[
-                styles.typeButtonText,
-                !isExpense && styles.typeButtonTextActive,
-              ]}
-            >
-              Income
-            </Text>
-          </TouchableOpacity>
-        </View>
-        {/* amounts container */}
-        <View style={styles.amountContainer}>
-          <Text style={styles.currencySymbol}>$</Text>
-          <TextInput
-            style={styles.amountInput}
-            placeholder="0.00"
-            placeholderTextColor={COLORS.textLight}
-            value={amount}
-            onChangeText={setAmount}
-            keyboardType="numeric"
-          />
-        </View>
-        {/* input container */}
-        <View style={styles.inputContainer}>
-          <Ionicons
-            name="create-outline"
-            size={22}
-            color={COLORS.textLight}
-            style={styles.inputIcon}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Transaction Name"
-            placeholderTextColor={COLORS.textLight}
-            value={title}
-            onChangeText={setTitle}
-          />
-        </View>
-        {/* categories container */}
-        <Text style={styles.sectionTitle}>
-          <Ionicons name="pricetag-outline" size={16} color={COLORS.text} />
-          Category
-        </Text>
-        {/* categories list */}
-        <View style={styles.categoryGrid}>
-          {CATEGORIES.map((category) => (
+          </View>
+          {/* expenses selector */}
+          <View style={styles.typeSelector}>
             <TouchableOpacity
-              key={category.id}
-              style={[
-                styles.categoryButton,
-                selectedCategory === category.name &&
-                  styles.categoryButtonActive,
-              ]}
-              onPress={() => setSelectedCategory(category.name)}
+              style={[styles.typeButton, isExpense && styles.typeButtonActive]}
+              onPress={() => setIsExpense(true)}
             >
               <Ionicons
-                name={category.icon}
-                size={20}
-                color={
-                  selectedCategory === category.name
-                    ? COLORS.white
-                    : COLORS.text
-                }
-                style={styles.categoryIcon}
+                name="arrow-down-circle"
+                size={22}
+                color={isExpense ? COLORS.white : COLORS.expense}
+                style={styles.typeIcon}
               />
               <Text
                 style={[
-                  selectedCategory === category.name &&
-                    styles.categoryButtonTextActive,
+                  styles.typeButtonText,
+                  isExpense && styles.typeButtonTextActive,
                 ]}
               >
-                {category.name}
+                Expense
               </Text>
             </TouchableOpacity>
-          ))}
+            {/* Income selector */}
+            <TouchableOpacity
+              style={[styles.typeButton, !isExpense && styles.typeButtonActive]}
+              onPress={() => setIsExpense(false)}
+            >
+              <Ionicons
+                name="arrow-up-circle"
+                size={22}
+                color={!isExpense ? COLORS.white : COLORS.income}
+                style={styles.typeIcon}
+              />
+              <Text
+                style={[
+                  styles.typeButtonText,
+                  !isExpense && styles.typeButtonTextActive,
+                ]}
+              >
+                Income
+              </Text>
+            </TouchableOpacity>
+            {/* payment selector
+            <TouchableOpacity
+              style={[styles.typeButton, isExpense && styles.typeButtonActive]}
+              onPress={() => setIsExpense(true) && setIsPayment(true)}
+            >
+              <Ionicons
+                name="arrow-up-circle"
+                size={22}
+                color={isExpense ? COLORS.white : COLORS.income}
+                style={styles.typeIcon}
+              />
+              <Text
+                style={[
+                  styles.typeButtonText,
+                  isExpense && styles.typeButtonTextActive,
+                ]}
+              >
+                Payment
+              </Text>
+            </TouchableOpacity> */}
+          </View>
+          {/* amounts container */}
+          <View style={styles.amountContainer}>
+            <Text style={styles.currencySymbol}>$</Text>
+            <TextInput
+              style={styles.amountInput}
+              placeholder="0.00"
+              placeholderTextColor={COLORS.textLight}
+              value={amount}
+              onChangeText={setAmount}
+              keyboardType="numeric"
+            />
+          </View>
+          {/* input container */}
+          <View style={styles.inputContainer}>
+            <Ionicons
+              name="create-outline"
+              size={22}
+              color={COLORS.textLight}
+              style={styles.inputIcon}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Transaction Name"
+              placeholderTextColor={COLORS.textLight}
+              value={title}
+              onChangeText={setTitle}
+            />
+          </View>
+
+          {/* categories container */}
+          <Text style={styles.sectionTitle}>
+            <Ionicons name="pricetag-outline" size={16} color={COLORS.text} />
+            Category
+          </Text>
+          {/* categories list */}
+          <View style={styles.categoryGrid}>
+            {CATEGORIES.map((category) => (
+              <TouchableOpacity
+                key={category.id}
+                style={[
+                  styles.categoryButton,
+                  selectedCategory === category.name &&
+                    styles.categoryButtonActive,
+                ]}
+                onPress={() => setSelectedCategory(category.name)}
+              >
+                <Ionicons
+                  name={category.icon}
+                  size={20}
+                  color={
+                    selectedCategory === category.name
+                      ? COLORS.white
+                      : COLORS.text
+                  }
+                  style={styles.categoryIcon}
+                />
+                <Text
+                  style={[
+                    selectedCategory === category.name &&
+                      styles.categoryButtonTextActive,
+                  ]}
+                >
+                  {category.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          {/* due date selector */}
+          <View
+            style={
+              selectedCategory === "CC Payment"
+                ? { display: "normal" }
+                : { display: "none" }
+            }
+          >
+            <Text style={styles.sectionTitle}>Due Date</Text>
+            <DateTimePicker
+              mode="single"
+              date={selectedDueDate}
+              onChange={({ date }) => setSelectedDueDate(date)}
+              styles={defaultStyles}
+            />
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
