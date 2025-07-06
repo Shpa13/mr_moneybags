@@ -1,4 +1,11 @@
-import { View, Text, Alert, TouchableOpacity, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  Alert,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import { useUser } from "@clerk/clerk-expo";
@@ -19,6 +26,7 @@ const CreateScreen = () => {
   const [amount, setAmount] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDueDate, setSelectedDueDate] = useState(new Date());
   const [isExpense, setIsExpense] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,6 +54,7 @@ const CreateScreen = () => {
           amount: formattedAmount,
           category: selectedCategory,
           transaction_date: selectedDate.toISOString().split("T")[0],
+          due_date: selectedDueDate.toISOString().split("T")[0],
         }),
       });
       //   console.log(selectedDate, selectedDate.toISOString().split("T")[0]);
@@ -69,7 +78,7 @@ const CreateScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* header element */}
       <View style={styles.header}>
         <TouchableOpacity
@@ -98,10 +107,20 @@ const CreateScreen = () => {
       <View style={styles.card}>
         {/* transaction date picker */}
         <View>
+          <Text>transaction date</Text>
           <DateTimePicker
             mode="single"
             date={selectedDate}
             onChange={({ date }) => setSelectedDate(date)}
+            styles={defaultStyles}
+          />
+        </View>
+        <View>
+          <Text>Due Date</Text>
+          <DateTimePicker
+            mode="single"
+            date={selectedDueDate}
+            onChange={({ date }) => setSelectedDueDate(date)}
             styles={defaultStyles}
           />
         </View>
@@ -214,7 +233,7 @@ const CreateScreen = () => {
           ))}
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

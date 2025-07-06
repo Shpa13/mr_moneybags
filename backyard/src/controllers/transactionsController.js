@@ -15,7 +15,7 @@ export async function getTransactionsByUserId(req, res) {
 }
 console.log("✅ Controller module loaded");
 export async function postTransactions(req, res) {
-  console.error("test");
+  //logging not working - to troubleshoot
   process.stdout.write("🪵 postTransactions running\n");
 
   // title, amount, category, user_id, transaction_date, due_date(for upcoming expenses)
@@ -37,6 +37,7 @@ export async function postTransactions(req, res) {
     // type fix transaction and due dates
     const parsedTransactionDate = new Date(transaction_date);
     const parsedDueDate = new Date(due_date);
+    console.log("parsed: ", parsedTransactionDate, parsedDueDate);
 
     if (
       isNaN(parsedTransactionDate.getTime()) ||
@@ -48,7 +49,7 @@ export async function postTransactions(req, res) {
 
     const transaction = await sql`
         INSERT INTO transactions(user_id, title, amount, category, transaction_date, due_date)
-        VALUES (${user_id},${title},${amount},${category},${transaction_date}::date,${parsedDueDate}::date)
+        VALUES (${user_id},${title},${amount},${category},${transaction_date},${parsedDueDate})
         RETURNING *`;
     console.log(transaction);
     res.status(201).json(transaction[0]);
