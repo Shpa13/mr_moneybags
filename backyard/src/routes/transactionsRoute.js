@@ -5,6 +5,8 @@ import {
   getTransactionSummary,
   postTransactions,
 } from "../controllers/transactionsController.js";
+//debug
+console.log("✅ transactionsRoute.js loaded");
 
 const router = express.Router();
 

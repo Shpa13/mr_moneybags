@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "expo-router";
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
+import DateTimePicker, { useDefaultStyles } from "react-native-ui-datepicker";
 
 import { API_URL } from "../../constants/api";
 import { styles } from "../../assets/styles/create.styles";
@@ -12,10 +13,12 @@ import { COLORS } from "../../constants/colors";
 const CreateScreen = () => {
   const router = useRouter();
   const { user } = useUser();
+  const defaultStyles = useDefaultStyles();
 
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [isExpense, setIsExpense] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,8 +45,10 @@ const CreateScreen = () => {
           title,
           amount: formattedAmount,
           category: selectedCategory,
+          transaction_date: selectedDate.toISOString().split("T")[0],
         }),
       });
+      //   console.log(selectedDate, selectedDate.toISOString().split("T")[0]);
       if (!response.ok) {
         const errorData = await response.json();
         console.log(errorData, user.id);
@@ -91,8 +96,17 @@ const CreateScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.card}>
+        {/* transaction date picker */}
+        <View>
+          <DateTimePicker
+            mode="single"
+            date={selectedDate}
+            onChange={({ date }) => setSelectedDate(date)}
+            styles={defaultStyles}
+          />
+        </View>
+        {/* expenses selector */}
         <View style={styles.typeSelector}>
-          {/* expenses selector */}
           <TouchableOpacity
             style={[styles.typeButton, isExpense && styles.typeButtonActive]}
             onPress={() => setIsExpense(true)}
@@ -166,6 +180,7 @@ const CreateScreen = () => {
           <Ionicons name="pricetag-outline" size={16} color={COLORS.text} />
           Category
         </Text>
+        {/* categories list */}
         <View style={styles.categoryGrid}>
           {CATEGORIES.map((category) => (
             <TouchableOpacity

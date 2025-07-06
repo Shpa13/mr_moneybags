@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-expo";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import {
   Alert,
   FlatList,
